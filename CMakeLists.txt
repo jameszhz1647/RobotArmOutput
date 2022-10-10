@@ -52,6 +52,7 @@ catkin_package(
 catkin_install_python(PROGRAMS
   scripts/move_group_python_interface_tutorial.py
   scripts/move_group_test.py
+  scripts/task.py
   scripts/talker.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
