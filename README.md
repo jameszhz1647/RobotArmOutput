@@ -1,22 +1,38 @@
 # RobotArmOutput
 
-**open the Rviz and joint_publisher_gui:**
+### Pipeline
 
-​	`roslaunch panda_moveit_config demo.launch use_gui:=true`
+### Data Collection
 
-**run moveIt move_group to execute motion plan:**
+Collecting data from both end during performing same reaching tasks:
 
-​	`rosrun move_group_pkg move_group_test.py` 
+For input end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:
 
-**run helper node to setup a joints data(position) publisher callback service:**
 
-​	`	rosrun move_group_pkg talker.py` 
 
-**record output data:**
+For output end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:
 
-​	`	rosbag record joints_data/position`
+1. Launch demo file in custom_ws: provide basics for panda MoveIt 
 
-**convert rosbag to csv:**
+   ```jsx
+   roslaunch panda_moveit_config demo.launch
+   ```
+
+2. Launch talker node: listen to and publish the desired topics and provide set_pub service (used for record purpose, embedded in set_target service)
+
+3. Launch task node: provide services: set_home, set_target  (2-3 in the same launch file)
+
+   ```jsx
+   roslaunch move_group_pkg robot_output_end.launch 
+   ```
+
+4. Run rosbag to record desired topic and call service to begin execution
+
+   ```jsx
+   rosbag record /joints_data/position 
+   ```
+
+5. convert rosbag to csv
 
 ​	instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
 
