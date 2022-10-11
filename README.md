@@ -2,7 +2,9 @@
 
 ### Pipeline
 
-![pipline](/home/jameszhz/Desktop/FinalProj/myo_ws/src/move_group_pkg/pipline.png)
+Total task involves two arms but train them one by one: 
+
+![pipline](pipline.png)
 
 ### Data Collection
 
@@ -10,11 +12,7 @@ Collecting data from both end during performing same reaching tasks:
 
 **For input end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:**
 
-Procedure describes in 
-
-[connect_myo]: https://github.com/jameszhz1647/connect_myo/tree/input_data
-
- repo
+Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_data
 
 **For output end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:**
 
