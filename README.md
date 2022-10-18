@@ -16,10 +16,10 @@ Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_da
 
 **For output end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:**
 
-1. Launch demo file in custom_ws: provide basics for panda MoveIt 
+1. Launch demo file in **custom_ws**: provide basics for panda MoveIt 
 
    ```jsx
-   roslaunch panda_moveit_config demo.launch
+   roslaunch panda_moveit_config demo.launch use_gui:=true
    ```
 
 2. Launch talker node: listen to and publish the desired topics and provide set_pub service (used for record purpose, embedded in set_target service)

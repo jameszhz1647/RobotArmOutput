@@ -12,8 +12,8 @@ class TranslateData():
         rospy.init_node('talker', anonymous=True)
         self.flag = False
         self.set_pub_service = rospy.Service('set_pub', Empty, self.set_pub_callback)
-        self.pub = rospy.Publisher('joints_data', JointState, queue_size=10)
-        self.sub = rospy.Subscriber("/move_group/fake_controller_joint_states", JointState, self.sub_callback)
+        self.pub = rospy.Publisher('/joints_data', JointState, queue_size=10)
+        self.sub = rospy.Subscriber("/joint_states", JointState, self.sub_callback)
     
             
     def sub_callback(self, data):
