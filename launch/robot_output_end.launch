@@ -3,9 +3,7 @@
   <node name="talker" pkg="move_group_pkg" type="talker.py" respawn="false" output="screen">
   </node>
 
-  <rosparam param="pos_x_y">[0, -0.7]</rosparam>
-
-
+  <rosparam param="x_y_pos">[0, -0.7]</rosparam>
   <node name="task" pkg="move_group_pkg" type="task.py" respawn="false" output="screen">
   </node>
 

@@ -30,10 +30,10 @@ Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_da
    roslaunch move_group_pkg robot_output_end.launch 
    ```
 
-4. Run rosbag to record desired topic (topic only publishes during performing task)
+4. Run rosbag to record desired topic (topic only publishes during performing task), including **position/velocity/acceleration** for each trajectory points. (trajectory size varies)
 
    ```jsx
-   rosbag record /joints_data/position 
+   rosbag record /points_data
    ```
 
 5. Call service to perform task

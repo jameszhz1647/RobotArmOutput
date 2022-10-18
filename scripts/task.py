@@ -218,8 +218,8 @@ class MoveGroupPythonInterfaceTutorial(object):
         ## end-effector:
         pose_goal = geometry_msgs.msg.Pose()
         pose_goal.orientation.w = 1.0
-        pose_goal.position.x = rospy.get_param('pos_x_y')[0]
-        pose_goal.position.y = rospy.get_param('pos_x_y')[1]
+        pose_goal.position.x = rospy.get_param('x_y_pos')[0]
+        pose_goal.position.y = rospy.get_param('x_y_pos')[1]
         pose_goal.position.z = 0.5
 
         move_group.set_pose_target(pose_goal)
