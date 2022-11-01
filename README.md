@@ -51,9 +51,9 @@ note: not including gripper operation yet, only 7 degree joint state kinematics.
    
 6. convert rosbag to csv
 
-​	instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
+​		instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
 
-​	`	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
+​		`	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
 
 7. need post process robot data
 
