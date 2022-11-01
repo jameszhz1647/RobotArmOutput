@@ -15,6 +15,8 @@ Collecting data from both end during performing same task:
 3. place the object at a new spot (90 deg CCW)
 4. back to home position
 
+![move_task](move_task.gif)
+
 note: not including gripper operation yet, only 7 degree joint state kinematics.
 
 **For input end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:**
