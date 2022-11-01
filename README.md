@@ -8,11 +8,18 @@ Total task involves two arms but train them one by one:
 
 ### Data Collection
 
-Collecting data from both end during performing same reaching tasks: 
+Collecting data from both end during performing same task: 
+
+1. from home to reach the object at 45 deg (CCW)
+2. pick the object straight up
+3. place the object at a new spot (90 deg CCW)
+4. back to home position
+
+note: not including gripper operation yet, only 7 degree joint state kinematics.
 
 **For input end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:**
 
-Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_data
+​	Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_data
 
 **For output end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:**
 
@@ -36,21 +43,21 @@ Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_da
    rosbag record /points_data
    ```
 
-5. Call service to perform task
+5. Call service to execute task
 
    ```jsx
-   rosservice call /set_home   //set home position  
-   rosparam set x_y_pos    // set x, y coordinates of target position
-   rosservice call /set_target   //set home position   
+   rosservice call /execute 
    ```
-
+   
 6. convert rosbag to csv
 
 ​	instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
 
 ​	`	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
 
+7. need post process robot data
 
+   normalize by points size or human execution time ? (pos/velocity/acc) 
 
 ### Variational Autoencoder
 

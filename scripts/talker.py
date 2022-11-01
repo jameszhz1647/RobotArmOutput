@@ -21,7 +21,7 @@ class TranslateData():
         # joint_trajectory = trajectory_msgs.msg.JointTrajectory()
         if self.flag:
             joint_trajectory = data.trajectory[0].joint_trajectory
-            print(type(joint_trajectory))
+            # print(type(joint_trajectory))
             for point in joint_trajectory.points:
                 self.pub.publish(point)
              

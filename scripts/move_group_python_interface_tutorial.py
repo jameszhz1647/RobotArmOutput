@@ -262,15 +262,27 @@ class MoveGroupPythonInterfaceTutorial(object):
         waypoints = []
 
         wpose = move_group.get_current_pose().pose
-        wpose.position.z -= scale * 0.1  # First move up (z)
-        wpose.position.y += scale * 0.2  # and sideways (y)
+        home_pose = copy.deepcopy(wpose)
+        x_offset = home_pose.position.x - 0
+        
+        # 1st: reach obj
+        wpose.position.x += scale * (0.354 - x_offset)
+        wpose.position.y += scale * -0.354 
+        wpose.position.z += scale * -0.5  
+        waypoints.append(copy.deepcopy(wpose))
+        
+        # 2nd: pick up 
+        wpose.position.z += scale * 0.2 
         waypoints.append(copy.deepcopy(wpose))
 
-        wpose.position.x += scale * 0.1  # Second move forward/backwards in (x)
+        # 3rd: place to new spot
+        wpose.position.x += scale * 0.146
+        wpose.position.y += scale * 0.354  
+        wpose.position.z += scale * -0.2
         waypoints.append(copy.deepcopy(wpose))
-
-        wpose.position.y -= scale * 0.1  # Third move sideways (y)
-        waypoints.append(copy.deepcopy(wpose))
+        
+        # 4th: back home
+        waypoints.append(home_pose)
 
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian
@@ -493,8 +505,8 @@ def main():
         )
         tutorial.go_to_joint_state()
 
-        input("============ Press `Enter` to execute a movement using a pose goal ...")
-        tutorial.go_to_pose_goal()
+        # input("============ Press `Enter` to execute a movement using a pose goal ...")
+        # tutorial.go_to_pose_goal()
 
         input("============ Press `Enter` to plan and display a Cartesian path ...")
         cartesian_plan, fraction = tutorial.plan_cartesian_path()
@@ -507,25 +519,25 @@ def main():
         input("============ Press `Enter` to execute a saved path ...")
         tutorial.execute_plan(cartesian_plan)
 
-        input("============ Press `Enter` to add a box to the planning scene ...")
-        tutorial.add_box()
+        # input("============ Press `Enter` to add a box to the planning scene ...")
+        # tutorial.add_box()
 
-        input("============ Press `Enter` to attach a Box to the Panda robot ...")
-        tutorial.attach_box()
+        # input("============ Press `Enter` to attach a Box to the Panda robot ...")
+        # tutorial.attach_box()
 
-        input(
-            "============ Press `Enter` to plan and execute a path with an attached collision object ..."
-        )
-        cartesian_plan, fraction = tutorial.plan_cartesian_path(scale=-1)
-        tutorial.execute_plan(cartesian_plan)
+        # input(
+        #     "============ Press `Enter` to plan and execute a path with an attached collision object ..."
+        # )
+        # cartesian_plan, fraction = tutorial.plan_cartesian_path(scale=-1)
+        # tutorial.execute_plan(cartesian_plan)
 
-        input("============ Press `Enter` to detach the box from the Panda robot ...")
-        tutorial.detach_box()
+        # input("============ Press `Enter` to detach the box from the Panda robot ...")
+        # tutorial.detach_box()
 
-        input(
-            "============ Press `Enter` to remove the box from the planning scene ..."
-        )
-        tutorial.remove_box()
+        # input(
+        #     "============ Press `Enter` to remove the box from the planning scene ..."
+        # )
+        # tutorial.remove_box()
 
         print("============ Python tutorial demo complete!")
     except rospy.ROSInterruptException:

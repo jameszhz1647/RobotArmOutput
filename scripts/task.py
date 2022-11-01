@@ -113,7 +113,7 @@ class MoveGroupPythonInterfaceTutorial(object):
         rospy.init_node("move_group_test", anonymous=True)
         
         self.set_home_service = rospy.Service('set_home', Empty, self.set_home_callback)
-        self.set_target_service = rospy.Service('set_target', Empty, self.set_target_callback)
+        self.execute_service = rospy.Service('execute', Empty, self.execute_service_callback)
 
         ## Instantiate a `RobotCommander`_ object. Provides information such as the robot's
         ## kinematic model and the robot's current joint states
@@ -204,48 +204,89 @@ class MoveGroupPythonInterfaceTutorial(object):
         res = EmptyResponse()
         return res
     
-    def set_target_callback(self, data):
+    def execute_service_callback(self, data):
+        
+        self.set_pub_caller(EmptyRequest())
+        
+        cartesian_plan, fraction = self.plan_cartesian_path()
+        
+        input("============ Press `Enter` to execute a saved path ...")
+        self.execute_plan(cartesian_plan)    
+        
+        self.set_home_caller(EmptyRequest())
+        
+        self.set_pub_caller(EmptyRequest())   
+        
+        print("============ Finish Task!")
+    
+        res = EmptyResponse()
+        return res
+
+    def plan_cartesian_path(self, scale=1):
         # Copy class variables to local variables to make the web tutorials more clear.
         # In practice, you should use the class variables directly unless you have a good
         # reason not to.
         move_group = self.move_group
 
-        ## BEGIN_SUB_TUTORIAL plan_to_pose
+        ## BEGIN_SUB_TUTORIAL plan_cartesian_path
         ##
-        ## Planning to a Pose Goal
-        ## ^^^^^^^^^^^^^^^^^^^^^^^
-        ## We can plan a motion for this group to a desired pose for the
-        ## end-effector:
-        pose_goal = geometry_msgs.msg.Pose()
-        pose_goal.orientation.w = 1.0
-        pose_goal.position.x = rospy.get_param('x_y_pos')[0]
-        pose_goal.position.y = rospy.get_param('x_y_pos')[1]
-        pose_goal.position.z = 0.5
+        ## Cartesian Paths
+        ## ^^^^^^^^^^^^^^^
+        ## You can plan a Cartesian path directly by specifying a list of waypoints
+        ## for the end-effector to go through. If executing  interactively in a
+        ## Python shell, set scale = 1.0.
+        ##
+        waypoints = []
 
-        move_group.set_pose_target(pose_goal)
-
-        self.set_pub_caller(EmptyRequest()) #call service to set topic publish flag to true
-        ## Now, we call the planner to compute the plan and execute it.
-        plan = move_group.go(wait=True)
-        # Calling `stop()` ensures that there is no residual movement
-        move_group.stop()
-        self.set_pub_caller(EmptyRequest()) #call service to set topic publish flag to false
+        wpose = move_group.get_current_pose().pose
+        home_pose = copy.deepcopy(wpose)
+        x_offset = home_pose.position.x - 0
         
-        # It is always good to clear your targets after planning with poses.
-        # Note: there is no equivalent function for clear_joint_value_targets()
-        move_group.clear_pose_targets()
+        # 1st: reach obj
+        wpose.position.x += scale * (0.354 - x_offset)
+        wpose.position.y += scale * -0.354 
+        wpose.position.z += scale * -0.5  
+        waypoints.append(copy.deepcopy(wpose))
+        
+        # 2nd: pick up 
+        wpose.position.z += scale * 0.2 
+        waypoints.append(copy.deepcopy(wpose))
 
-        ## END_SUB_TUTORIAL
+        # 3rd: place to new spot
+        wpose.position.x += scale * 0.146
+        wpose.position.y += scale * 0.354  
+        wpose.position.z += scale * -0.2
+        waypoints.append(copy.deepcopy(wpose))
+        
+        # # 4th: back home
+        # waypoints.append(home_pose)
 
-        # For testing:
-        # Note that since this section of code will not be included in the tutorials
-        # we use the class variable rather than the copied state variable
-        current_pose = self.move_group.get_current_pose().pose
-        # return all_close(pose_goal, current_pose, 0.01)
+        # We want the Cartesian path to be interpolated at a resolution of 1 cm
+        # which is why we will specify 0.01 as the eef_step in Cartesian
+        # translation.  We will disable the jump threshold by setting it to 0.0,
+        # ignoring the check for infeasible jumps in joint space, which is sufficient
+        # for this tutorial.
+        (plan, fraction) = move_group.compute_cartesian_path(
+            waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        )  # jump_threshold
+
+        # Note: We are just planning, not asking move_group to actually move the robot yet:
+        return plan, fraction
+
+    def execute_plan(self, plan):
+        # Copy class variables to local variables to make the web tutorials more clear.
+        # In practice, you should use the class variables directly unless you have a good
+        # reason not to.
+        move_group = self.move_group
+
+        ## BEGIN_SUB_TUTORIAL execute_plan
+        ##
+        ## Executing a Plan
+        ## ^^^^^^^^^^^^^^^^
+        ## Use execute if you would like the robot to follow
+        ## the plan that has already been computed:
+        move_group.execute(plan, wait=True)    
     
-        res = EmptyResponse()
-        return res
-
 def main():
     try:
         print("")
@@ -257,12 +298,11 @@ def main():
         input(
             "============ Press `Enter` to begin the task by setting up the moveit_commander ..."
         )
-        task = MoveGroupPythonInterfaceTutorial()
+        task = MoveGroupPythonInterfaceTutorial() 
         
         task.set_home_caller(EmptyRequest())
-        # task.set_target_caller(EmptyRequest())
 
-        print("============ Task complete!")
+        print("============ Plan Task!")
         
         rospy.spin()
         
