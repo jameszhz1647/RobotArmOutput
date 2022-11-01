@@ -11,11 +11,14 @@ Total task involves two arms but train them one by one:
 Collecting data from both end during performing same task: 
 
 1. from home to reach the object at 45 deg (CCW)
+
 2. pick the object straight up
+
 3. place the object at a new spot (90 deg CCW)
+
 4. back to home position
 
-![move_task](move_task.gif)
+   ![move_task](move_task.gif)
 
 note: not including gripper operation yet, only 7 degree joint state kinematics.
 
@@ -50,12 +53,13 @@ note: not including gripper operation yet, only 7 degree joint state kinematics.
    ```jsx
    rosservice call /execute 
    ```
-   
+
 6. convert rosbag to csv
 
-​		instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
+   instruction detail: https://github.com/AtsushiSakai/rosbag_to_csv
 
-​		`	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
+   `	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
+
 
 7. need post process robot data
 
