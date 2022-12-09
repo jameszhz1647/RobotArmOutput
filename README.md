@@ -29,13 +29,13 @@ note: not including gripper operation yet, only 7 degree joint state kinematics.
 
 **For Human end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:**
 
-​	Procedure describes in https://github.com/jameszhz1647/connect_myo/tree/input_data
+[Procedure details](https://github.com/jameszhz1647/connect_myo/tree/input_data)
 
 **For Robot end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:**
 
 ## ROS Nodes
 
-- `task.py` plans and executes one task including 4 segments using `move_group`, publishes the `joint_state` topic all the time
+- `task.py` plans and executes one task including 4 segments using `move_group`, publishes the `joint_state` topic all the time.
 - `talker.py` subscribe the `joint_state` topic, publish the `points_data` topic that needed to be collected, provides a service to set the switch of publisher for `points_data` topic.
 
 ## Instructions
@@ -68,7 +68,7 @@ note: not including gripper operation yet, only 7 degree joint state kinematics.
 
 6. Task contains 4 segments described above, so each segment is paused and will need to click “Enter” to continues next segment. The prompt will show in the terminal as well.
 
-7. convert rosbag to csv [(instruction detail)](https://github.com/AtsushiSakai/rosbag_to_csv)
+7. convert rosbag to csv [(instruction details)](https://github.com/AtsushiSakai/rosbag_to_csv)
 
    `	rosrun rosbag_to_csv rosbag_to_csv.py` (make sure roscore running)
 
