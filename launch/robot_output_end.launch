@@ -1,10 +1,25 @@
 <launch>
 
+  <arg name="plot_joints_state" default="true" doc="plot the states for 7 joints"/>
+
   <node name="talker" pkg="move_group_pkg" type="talker.py" respawn="false" output="screen">
   </node>
 
   <rosparam param="x_y_z_pos">[0, -0.7, 0.5]</rosparam>
   <node name="task" pkg="move_group_pkg" type="task.py" respawn="false" output="screen">
   </node>
+
+  <group if="$(arg plot_joints_state)">
+      <node name="joints_states"
+          pkg="rqt_plot"
+          type="rqt_plot"
+          args="/points_data/position[0] 
+              /points_data/position[1] 
+              /points_data/position[2] 
+              /points_data/position[3] 
+              /points_data/position[4] 
+              /points_data/position[5] 
+              /points_data/position[6] "/>
+  </group>
 
 </launch>
