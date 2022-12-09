@@ -29,9 +29,11 @@ note: not including gripper operation yet, only 7 degree joint state kinematics.
 
 **For Human end - record EMG and IMU topic 4 Myo devices (2 for each arm) from human:**
 
-[Procedure details](https://github.com/jameszhz1647/connect_myo/tree/input_data)
+[Version of using one dongle for one Myo (recommended)](https://github.com/jameszhz1647/connect_myo/tree/human_data_acquisition_clean)
 
-**For Robot end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:**
+[Version of using one dongle for two Myo (EMG does not  published at 200 Hz)](https://github.com/jameszhz1647/connect_myo/tree/4Myo2Dongle_clean)
+
+**For Robot end - used ROS MoveIt to plan a motion by setting target end-effector for Franka robot arm, recorded the topics of joint positions and velocities:** details described below
 
 ## ROS Nodes
 
